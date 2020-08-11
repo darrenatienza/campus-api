@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CampusISApi.Model;
+using CampusISApi.Repositories;
+using CampusISApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -27,6 +30,13 @@ namespace CampusISApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.TryAddSingleton<IRoomService, RoomService>();
+            services.TryAddSingleton<IRoomRepository, RoomRepository>();
+            services.TryAddSingleton<IEnumerable<Room>>(new Room[]{
+                new Room { Name = "Iga" },
+                new Room { Name = "Kōga" },
+            });
+
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(connectionString));
             services.AddControllers();
