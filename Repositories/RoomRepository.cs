@@ -2,17 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using campus_api.Services.IMappingService;
 using CampusISApi.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace CampusISApi.Repositories
 {
     public class RoomRepository : IRoomRepository
     {
-        private readonly List<Room> _rooms;
-        public RoomRepository(IEnumerable<Room> rooms)
+        private readonly IRoomMappingService _roomMappingService;
+        private readonly DataContext _context;
+        public RoomRepository(IRoomMappingService roomMappingService, DataContext context)
         {
-            if (rooms == null) { throw new ArgumentNullException(nameof(rooms)); }
-            _rooms = new List<Room>(rooms);
+            _roomMappingService = roomMappingService ?? throw new ArgumentNullException(nameof(roomMappingService));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+
         }
         public Task<Room> CreateAsync(Room room)
         {
@@ -24,15 +28,18 @@ namespace CampusISApi.Repositories
             throw new System.NotSupportedException();
         }
 
-        public Task<IEnumerable<Room>> ReadAllAsync()
+        public async Task<IEnumerable<Room>> ReadAllAsync()
         {
-            return Task.FromResult(_rooms.AsEnumerable());
+            var entities = await _context.Rooms.ToListAsync();
+            var rooms = _roomMappingService.Map(entities.AsEnumerable());
+            return rooms;
         }
 
-        public Task<Room> ReadOneAsync(string roomName)
+        public async Task<Room> ReadOneAsync(string roomName)
         {
-            var room = _rooms.FirstOrDefault(r => r.Name == roomName);
-            return Task.FromResult(room);
+            var entity = await _context.Rooms.FirstOrDefaultAsync(x => x.Name == roomName);
+            var rooms = _roomMappingService.Map(entity);
+            return rooms;
         }
 
         public Task<Room> UpdateAsync(Room room)

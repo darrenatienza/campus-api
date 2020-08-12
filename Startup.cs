@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using campus_api.Repositories.Entities;
+using campus_api.Services.IMappingService;
+using campus_api.Services.Mappers;
+using campus_api.Services.MappingService;
 using CampusISApi.Model;
 using CampusISApi.Repositories;
 using CampusISApi.Services;
@@ -30,12 +34,20 @@ namespace CampusISApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.TryAddSingleton<IRoomService, RoomService>();
-            services.TryAddSingleton<IRoomRepository, RoomRepository>();
-            services.TryAddSingleton<IEnumerable<Room>>(new Room[]{
-                new Room { Name = "Iga" },
-                new Room { Name = "Kōga" },
-            });
+            services.TryAddTransient<IRoomService, RoomService>();
+            services.TryAddTransient<IRoomRepository, RoomRepository>();
+            services.TryAddTransient<IRoomMappingService, RoomMappingService>();
+
+            services.TryAddTransient<IMapper<Room, RoomEntity>, RoomToRoomEntityMapper>();
+            services.TryAddTransient<IMapper<RoomEntity, Room>, RoomEntityToRoomMapper>();
+            services.TryAddTransient<IMapper<IEnumerable<RoomEntity>, IEnumerable<Room>>, EnumerableMapper<RoomEntity, Room>>();
+
+
+
+            //services.TryAddSingleton<IEnumerable<Room>>(new Room[]{
+            //    new Room { Name = "Iga" },
+            //    new Room { Name = "Kōga" },
+            //});
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(connectionString));
