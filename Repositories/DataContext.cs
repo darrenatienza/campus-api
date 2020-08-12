@@ -1,6 +1,8 @@
+
+using campus_api.Repositories.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CampusISApi.Model
+namespace CampusISApi.Repositories
 {
     public class DataContext : DbContext
     {
@@ -9,6 +11,6 @@ namespace CampusISApi.Model
 
         }
 
-        public DbSet<Room> Rooms { get; set; }
+        public DbSet<RoomEntity> Rooms { get; set; }
     }
 }
