@@ -44,10 +44,10 @@ namespace CampusISApi
 
 
 
-            //services.TryAddSingleton<IEnumerable<Room>>(new Room[]{
-            //    new Room { Name = "Iga" },
-            //    new Room { Name = "Kōga" },
-            //});
+            services.TryAddSingleton<IEnumerable<Room>>(new Room[]{
+                new Room { Name = "Iga" },
+                new Room { Name = "Kōga" },
+            });
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(connectionString));

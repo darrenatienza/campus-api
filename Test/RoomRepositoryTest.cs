@@ -29,42 +29,56 @@ namespace CampusISApi.Test
         public class ReadAllAsync : RoomRepositoryTest
         {
             [Fact]
-            public async Task Should_return_all_clans()
+            public async Task Should_map_ReadAll_and_return_the_expected_room()
             {
                 // Arrange
                 var entities = new RoomEntity[0];
-                var expectedNinja = new Room[0];
+                var expectedRoom = new Room[0];
 
 
                 RoomMappingServiceMock
                     .Setup(x => x.Map(entities))
-                    .Returns(expectedNinja)
+                    .Returns(expectedRoom)
                     .Verifiable();
 
                 // Act
                 var result = await RepositoryUnderTest.ReadAllAsync();
-
                 // Assert
                 RoomMappingServiceMock
                     .Verify(x => x.Map(entities), Times.Once);
-                Assert.Same(expectedNinja, result);
+
+                DataContextMock
+                    .Verify(x => x.Rooms, Times.Once);
+
+                Assert.Equal(expectedRoom, result);
             }
         }
 
         public class ReadOneAsync : RoomRepositoryTest
         {
             [Fact]
-            public async Task Should_return_the_expected_room()
+            public async Task Should_map_ReadOne_and_return_the_expected_ninja()
             {
                 // Arrange
-                //var expectedRoom = Rooms[1];
-                //var expectedRoomName = expectedRoom.Name;
-                //
-                //// Act
-                //var result = await RepositoryUnderTest.ReadOneAsync(expectedRoomName);
-                //
-                //// Assert
-                //Assert.Same(expectedRoom, result);
+                var roomName = "My room";
+               
+                var entity = new RoomEntity();
+                var expectedNinja = new Room();
+
+                
+                RoomMappingServiceMock
+                    .Setup(x => x.Map(entity))
+                    .Returns(expectedNinja)
+                    .Verifiable();
+
+                // Act
+                var result = await RepositoryUnderTest.ReadOneAsync(roomName);
+
+                // Assert
+                RoomMappingServiceMock
+                    .Verify(x => x.Map(entity), Times.Once);
+            
+                Assert.Same(expectedNinja, result);
             }
 
             [Fact]
