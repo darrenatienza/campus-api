@@ -11,10 +11,11 @@ namespace CampusISApi.Test
 {
     public class RoomRepositoryTest
     {
+        int test;
         protected RoomRepository RepositoryUnderTest { get; }
 
 
-        protected Mock<IRoomMappingService> RoomMappingServiceMock { get; }
+        protected Mock<IRoomMappingService> RoomMappingServiceMock { get; } 
         protected Mock<DataContext> DataContextMock { get; }
         public RoomRepositoryTest()
         {
