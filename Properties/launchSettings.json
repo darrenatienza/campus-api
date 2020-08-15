@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "v1/rooms",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "CampusISApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "v1/rooms",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
